@@ -1,17 +1,15 @@
-package com.fmsp.medical_appointment.entity.oracle;
+package com.fmsp.medical_appointment.entity.core.oracle;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @DiscriminatorValue("PACIENTE")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Paciente extends Persona{
+public class Paciente extends Usuario {
 }

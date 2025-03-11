@@ -1,5 +1,6 @@
-package com.fmsp.medical_appointment.entity.oracle;
+package com.fmsp.medical_appointment.entity.core.oracle;
 
+import com.fmsp.medical_appointment.entity.base.GenericEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,16 +13,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Especialidad {
+public class Especialidad extends GenericEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_especialidad")
+    @Column(name = "ID_ESPECIALIDAD")
     private Long id;
 
-    @Column(name = "nombre_especialidad", nullable = false)
+    @Column(name = "NOMBRE_EPECIALIDAD", nullable = false)
     private String nombreEspecialidad;
-
-    @Column(name = "estado", nullable = false)
-    private Boolean estado;
 }

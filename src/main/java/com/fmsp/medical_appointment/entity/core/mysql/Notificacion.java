@@ -1,5 +1,6 @@
-package com.fmsp.medical_appointment.entity.mysql;
+package com.fmsp.medical_appointment.entity.core.mysql;
 
+import com.fmsp.medical_appointment.entity.base.GenericEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,22 +15,19 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notificacion {
+public class Notificacion extends GenericEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_notificacion")
+    @Column(name = "ID_NOTIFICACION")
     private Long id;
 
-    @Column(name = "id_paciente", nullable = false)
+    @Column(name = "ID_PACIENTE", nullable = false)
     private Long idPaciente;
 
-    @Column(name = "mensaje", nullable = false)
+    @Column(name = "MENSAJE", nullable = false)
     private String mensaje;
 
-    @Column(name = "fecha_envio", nullable = false)
+    @Column(name = "FECHA_ENVIO", nullable = false)
     private LocalDateTime fechaEnvio;
-
-    @Column(name = "estado", nullable = false)
-    private String estado;
 }

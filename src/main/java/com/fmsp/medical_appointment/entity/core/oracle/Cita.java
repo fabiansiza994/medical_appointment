@@ -1,4 +1,4 @@
-package com.fmsp.medical_appointment.entity.oracle;
+package com.fmsp.medical_appointment.entity.core.oracle;
 
 import com.fmsp.medical_appointment.entity.enums.EstadoCita;
 import com.fmsp.medical_appointment.entity.enums.MetodoPago;
@@ -20,33 +20,34 @@ import java.time.LocalDateTime;
 public class Cita {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_cita")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cita_seq")
+    @SequenceGenerator(name = "cita_seq", sequenceName = "CITA_SEQ", allocationSize = 1)
+    @Column(name = "ID_CITA")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_paciente", nullable = false)
+    @JoinColumn(name = "ID_PACIENTE", nullable = false)
     private Paciente paciente;
 
     @ManyToOne
-    @JoinColumn(name = "id_medico", nullable = false)
+    @JoinColumn(name = "ID_MEDICO", nullable = false)
     private Profesional medico;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_cita", nullable = false)
+    @Column(name = "TIPO_CITA", nullable = false)
     private TipoCita tipoCita;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "metodo_pago", nullable = false)
+    @Column(name = "METODO_PAGO", nullable = false)
     private MetodoPago metodoPago;
 
-    @Column(name = "valor_cita", nullable = false)
+    @Column(name = "VALOR_CITA", nullable = false)
     private Double valorCita;
 
-    @Column(name = "fecha_hora", nullable = false)
+    @Column(name = "FECHA_HORA", nullable = false)
     private LocalDateTime fechaHora;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado", nullable = false)
+    @Column(name = "ESTADO", nullable = false)
     private EstadoCita estado;
 }

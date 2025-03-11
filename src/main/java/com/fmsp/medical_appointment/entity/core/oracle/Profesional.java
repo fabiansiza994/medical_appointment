@@ -1,4 +1,4 @@
-package com.fmsp.medical_appointment.entity.oracle;
+package com.fmsp.medical_appointment.entity.core.oracle;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Profesional extends Persona{
+public class Profesional extends Usuario {
 
     @ManyToOne
     @JoinColumn(name = "id_especialidad", nullable = false)

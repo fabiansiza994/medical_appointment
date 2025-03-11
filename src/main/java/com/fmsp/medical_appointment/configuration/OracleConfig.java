@@ -44,7 +44,7 @@ public class OracleConfig {
             @Qualifier("oracleDataSource") DataSource oracleDataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(oracleDataSource);
-        em.setPackagesToScan("com.fmsp.medical_appointment.entity.oracle");
+        em.setPackagesToScan("com.fmsp.medical_appointment.entity.core.oracle");
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
         Map<String, Object> properties = new HashMap<>();

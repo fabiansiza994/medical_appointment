@@ -40,7 +40,7 @@ public class MySQLConfig {
             @Qualifier("mysqlDataSource") DataSource mysqlDataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(mysqlDataSource);
-        em.setPackagesToScan("com.fmsp.medical_appointment.entity.mysql");
+        em.setPackagesToScan("com.fmsp.medical_appointment.entity.core.mysql");
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
         Map<String, Object> properties = new HashMap<>();

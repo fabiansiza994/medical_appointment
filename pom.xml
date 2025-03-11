@@ -29,6 +29,9 @@
 	</scm>
 	<properties>
 		<java.version>23</java.version>
+		<swagger-core.version>2.2.20</swagger-core.version>
+		<swagger-ui.version>2.3.0</swagger-ui.version>
+		<modelmapper.version>3.0.0</modelmapper.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -69,22 +72,39 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>${swagger-core.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${swagger-ui.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<!-- Plugin de compilación para soportar Java 23 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version> <!-- Versión compatible -->
 				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-					</annotationProcessorPaths>
+					<source>23</source>
+					<target>23</target>
 				</configuration>
 			</plugin>
+
+			<!-- Plugin para Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -99,5 +119,6 @@
 			</plugin>
 		</plugins>
 	</build>
+
 
 </project>
