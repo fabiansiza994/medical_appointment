@@ -1,5 +1,9 @@
 # medical_appointment
 
+### Paquete del exception manager
+
+src/main/java/com/fmsp/medical_appointment/configuration/exceptionManager
+
 ## Bad Request Example
 
 Este es un ejemplo de respuesta cuando la solicitud contiene un error de formato en el campo `TipoCita`.
