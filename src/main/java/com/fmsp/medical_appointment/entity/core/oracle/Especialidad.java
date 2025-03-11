@@ -16,10 +16,11 @@ import lombok.Setter;
 public class Especialidad extends GenericEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "esp_seq")
+    @SequenceGenerator(name = "esp_seq", sequenceName = "ESP_SEQ", allocationSize = 1)
     @Column(name = "ID_ESPECIALIDAD")
     private Long id;
 
-    @Column(name = "NOMBRE_EPECIALIDAD", nullable = false)
+    @Column(name = "NOMBRE_ESPECIALIDAD", nullable = false)
     private String nombreEspecialidad;
 }

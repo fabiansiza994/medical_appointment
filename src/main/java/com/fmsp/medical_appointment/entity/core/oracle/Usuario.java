@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "USUARIO")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,21 +20,26 @@ public class Usuario extends GenericEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuario_seq")
     @SequenceGenerator(name = "usuario_seq", sequenceName = "PERSONA_SEQ", allocationSize = 1)
-    @Column(name = "id_usuario")
+    @Column(name = "ID_USUARIO")
     private Long id;
 
-    @Column(name = "nombre", nullable = false)
+    @Column(name = "NOMBRE", nullable = false)
     private String nombre;
 
-    @Column(name = "apellido", nullable = false)
+    @Column(name = "APELLIDO", nullable = false)
     private String apellido;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "EMAIL", unique = true)
     private String email;
 
-    @Column(name = "telefono")
+    @Column(name = "TELEFONO")
     private String telefono;
 
-    @Column(name = "fecha_nacimiento")
+    @Column(name = "FECHA_NACIMIENTO")
     private LocalDateTime fechaNacimiento;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_ESPECIALIDAD")
+    private Especialidad especialidad;
+
 }

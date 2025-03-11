@@ -33,7 +33,7 @@ public class Pago extends GenericEntity {
     private Cita cita;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PACIENTE", nullable = false)
-    private Paciente paciente;
+    @JoinColumn(name = "ID_USUARIO", nullable = false)
+    private Usuario paciente;
 
 }

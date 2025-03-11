@@ -18,13 +18,14 @@ import java.time.LocalDateTime;
 public class Agenda extends GenericEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "agenda_seq")
+    @SequenceGenerator(name = "agenda_seq", sequenceName = "AGENDA_SEQ", allocationSize = 1)
     @Column(name = "ID_AGENDA")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "ID_MEDICO", nullable = false)
-    private Profesional medico;
+    private Usuario medico;
 
     @Column(name = "FECHA", nullable = false)
     private LocalDateTime fecha;

@@ -27,11 +27,11 @@ public class Cita {
 
     @ManyToOne
     @JoinColumn(name = "ID_PACIENTE", nullable = false)
-    private Paciente paciente;
+    private Usuario paciente;
 
     @ManyToOne
     @JoinColumn(name = "ID_MEDICO", nullable = false)
-    private Profesional medico;
+    private Usuario medico;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPO_CITA", nullable = false)

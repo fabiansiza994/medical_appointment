@@ -1,5 +1,6 @@
 package com.fmsp.medical_appointment.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fmsp.medical_appointment.entity.enums.EstadoCita;
 import com.fmsp.medical_appointment.entity.enums.MetodoPago;
 import com.fmsp.medical_appointment.entity.enums.TipoCita;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SolicitarCitaDTO {
     private String idTx;
     private Long idPaciente;

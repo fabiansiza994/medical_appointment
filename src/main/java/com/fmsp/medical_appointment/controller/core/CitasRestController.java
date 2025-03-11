@@ -30,15 +30,11 @@ public class CitasRestController implements ICitasRestController{
 
         List<ErrorItemDTO> errors = new ArrayList<>();
 
-        if(solicitarCitaDTO.getTipoCita() == TipoCita.valueOf("PRESENCIAL")){
-            errors.add(new ErrorItemDTO("E001", "404", "error"));
-        }
-
         if(!errors.isEmpty()){
             return ResponseHandler.badRequestResponse(errors, idTest.toString());
         }
 
-        //var response = citaService.solicitarCita(solicitarCitaDTO);
-        return ResponseHandler.successResponse(solicitarCitaDTO, idTest.toString());
+        var response = citaService.solicitarCita(solicitarCitaDTO);
+        return ResponseHandler.successResponse(response, idTest.toString());
     }
 }
