@@ -2,10 +2,12 @@ package com.fmsp.medical_appointment.configuration.exceptionManager;
 
 import com.fmsp.medical_appointment.configuration.exceptionManager.exceptions.CustomServiceException;
 import com.fmsp.medical_appointment.dto.ErrorItemDTO;
+import com.fmsp.medical_appointment.util.Constants;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
 
 import java.util.Collections;
 
@@ -20,7 +22,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse<String>> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        ErrorItemDTO errorItemDTO = new ErrorItemDTO("E001", "404", e.getMessage());
+        ErrorItemDTO errorItemDTO = new ErrorItemDTO(Constants.ERROR_E001, Constants.ERROR_404, e.getMessage());
+        return ResponseHandler.badRequestResponse(Collections.singletonList(errorItemDTO), "- -");
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiResponse<String>> handleRuntimeException(RuntimeException e) {
+        ErrorItemDTO errorItemDTO = new ErrorItemDTO(Constants.ERROR_E002, Constants.ERROR_500, Constants.INTERNAL_ERROR_MESSAGE);
         return ResponseHandler.badRequestResponse(Collections.singletonList(errorItemDTO), "- -");
     }
 

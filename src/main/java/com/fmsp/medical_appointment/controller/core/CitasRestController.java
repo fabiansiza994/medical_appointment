@@ -38,7 +38,7 @@ public class CitasRestController implements ICitasRestController{
             return ResponseHandler.badRequestResponse(errors, idTest.toString());
         }
 
-        var response = citaService.solicitarCita(solicitarCitaDTO);
-        return ResponseHandler.successResponse(response, idTest.toString());
+        //var response = citaService.solicitarCita(solicitarCitaDTO);
+        return ResponseHandler.successResponse(solicitarCitaDTO, idTest.toString());
     }
 }
