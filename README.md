@@ -51,4 +51,7 @@ Este es un ejemplo de respuesta cuando la solicitud se procesa exitosamente.
     "tipoCita": "VIRTUAL",
     "metodoPago": "TARJETA",
     "valorCita": 150.0,
-    "estado": "PENDIENTE
+    "estado": "PENDIENTE"
+  },
+  "message": "EXITO"
+}
