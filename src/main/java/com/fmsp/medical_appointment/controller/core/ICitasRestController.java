@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface ICitasRestController {
 
     @PostMapping("/solicitar")
-    ResponseEntity<ApiResponse<Object>> test(@RequestBody SolicitarCitaDTO solicitarCitaDTO);
+    ResponseEntity<ApiResponse<Object>> agendarCita(@RequestBody SolicitarCitaDTO solicitarCitaDTO);
 }

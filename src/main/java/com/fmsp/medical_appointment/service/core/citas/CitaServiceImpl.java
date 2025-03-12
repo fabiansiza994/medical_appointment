@@ -5,16 +5,14 @@ import com.fmsp.medical_appointment.dto.*;
 import com.fmsp.medical_appointment.entity.core.oracle.Cita;
 import com.fmsp.medical_appointment.entity.enums.EstadoCita;
 import com.fmsp.medical_appointment.repository.jpa.oracle.CitaRepository;
-import com.fmsp.medical_appointment.repository.jpa.oracle.UsuarioRepository;
 import com.fmsp.medical_appointment.service.core.agenda.IConsultarAgenda;
 import com.fmsp.medical_appointment.service.core.agenda.ICrearAgenda;
 import com.fmsp.medical_appointment.service.core.notificacion.IEnviarNotificacion;
-import com.fmsp.medical_appointment.service.usuario.IConsultarUsuario;
+import com.fmsp.medical_appointment.service.usuario.IConsultarUsuarioEspecialista;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Service
 public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
@@ -22,20 +20,21 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
     private final IConsultarAgenda consultarAgenda;
     private final ICrearAgenda crearAgenda;
     private final IEnviarNotificacion enviarNotificacion;
-    private final IConsultarUsuario consultarUsuario;
+    private final IConsultarUsuarioEspecialista consultarUsuarioEspecialista;
 
     private final CitaRepository citaRepository;
     private final ModelMapper modelMapper;
-    private final UsuarioRepository usuarioRepository;
 
-    public CitaServiceImpl(IConsultarAgenda consultarAgenda, ICrearAgenda crearAgenda, IEnviarNotificacion enviarNotificacion, IConsultarUsuario consultarUsuario, CitaRepository citaRepository, ModelMapper modelMapper, UsuarioRepository usuarioRepository) {
+    public CitaServiceImpl(IConsultarAgenda consultarAgenda, ICrearAgenda crearAgenda,
+                           IEnviarNotificacion enviarNotificacion,
+                           IConsultarUsuarioEspecialista consultarUsuarioEspecialista,
+                           CitaRepository citaRepository, ModelMapper modelMapper) {
         this.consultarAgenda = consultarAgenda;
         this.crearAgenda = crearAgenda;
         this.enviarNotificacion = enviarNotificacion;
-        this.consultarUsuario = consultarUsuario;
+        this.consultarUsuarioEspecialista = consultarUsuarioEspecialista;
         this.citaRepository = citaRepository;
         this.modelMapper = modelMapper;
-        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
@@ -56,7 +55,7 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
         response.setDatosCita(modelMapper.map(citaDB, SolicitarCitaDTO.class));
         response.setAgenda(agenda);
 
-        var especialista = consultarUsuario.consultarUsuario(response.getDatosCita().getIdMedico());
+        var especialista = consultarUsuarioEspecialista.consultarEspecialista(response.getDatosCita().getIdMedico());
 
         response.getAgenda().setMedico(especialista);
         enviarNotificacion(response);

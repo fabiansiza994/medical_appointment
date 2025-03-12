@@ -1,5 +1,7 @@
 package com.fmsp.medical_appointment.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fmsp.medical_appointment.entity.enums.EstadoCita;
 import com.fmsp.medical_appointment.entity.enums.MetodoPago;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(value = { "idPaciente", "idMedico", "idEspecialidad", "fechaHora" }, allowSetters = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SolicitarCitaDTO {
     private String idTx;

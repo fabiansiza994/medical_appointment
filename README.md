@@ -4,6 +4,28 @@
 
 src/main/java/com/fmsp/medical_appointment/configuration/exceptionManager
 
+# medical_appointment
+
+## 📌 Endpoint: Solicitar Cita Médica
+
+### **📍 URL**
+POST http://localhost:8082/medical-appointment/v1/citas/solicitar
+
+
+### **📤 Request Body (Ejemplo)**
+```json
+{
+  "idPaciente": 1,
+  "idMedico": 2,
+  "idEspecialidad": 1,
+  "fechaHora": "2025-03-11T14:27:00",
+  "tipoCita": "PRESENCIAL",
+  "metodoPago": "TARJETA",
+  "valorCita": 150.000,
+  "estado": "PENDIENTE"
+}
+```
+
 ## Bad Request Example
 
 Este es un ejemplo de respuesta cuando la solicitud contiene un error de formato en el campo `TipoCita`.
@@ -38,27 +60,40 @@ Este es un ejemplo de respuesta cuando la solicitud contiene un error de formato
 }
 
 ```
+# medical_appointment
+
 ## Success Response Example
 
 Este es un ejemplo de respuesta cuando la solicitud se procesa exitosamente.
 
 ```json
 {
-  "idTx": "0615c124-1495-45a7-8877-d6d143a2cf25",
+  "idTx": "f71a2ee6-82c8-442d-b48d-fd6b91114ad0",
   "processStatus": "PS",
   "data": {
-    "idTx": "0615c124-1495-45a7-8877-d6d143a2cf25",
-    "idPaciente": 123,
-    "idMedico": 456,
-    "idEspecialidad": 789,
-    "fechaHora": "2025-03-10T14:30:00",
-    "tipoCita": "VIRTUAL",
-    "metodoPago": "TARJETA",
-    "valorCita": 150.0,
-    "estado": "PENDIENTE"
+    "agenda": {
+      "medico": {
+        "nombre": "marquez",
+        "apellido": "marquez",
+        "email": "marquez@gmail.com",
+        "telefono": "31111111",
+        "especialidad": {
+          "nombreEspecialidad": "Medicina General"
+        }
+      },
+      "fecha": "11/03/2025 a las 14:27",
+      "disponibilidad": true
+    },
+    "datosCita": {
+      "tipoCita": "PRESENCIAL",
+      "metodoPago": "TARJETA",
+      "valorCita": 150.0,
+      "estado": "PENDIENTE"
+    }
   },
   "message": "EXITO"
 }
+
 ```
 
 ## Failed Response Example

@@ -24,7 +24,7 @@ public class CitasRestController implements ICitasRestController{
     }
 
     @Override
-    public ResponseEntity<ApiResponse<Object>> test(SolicitarCitaDTO solicitarCitaDTO) {
+    public ResponseEntity<ApiResponse<Object>> agendarCita(SolicitarCitaDTO solicitarCitaDTO) {
         UUID idTest = UUID.randomUUID();
 
         solicitarCitaDTO.setIdTx(idTest.toString());
