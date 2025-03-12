@@ -2,13 +2,12 @@ package com.fmsp.medical_appointment.service.core.agenda;
 
 import com.fmsp.medical_appointment.dto.AgendaDTO;
 import com.fmsp.medical_appointment.entity.core.oracle.Agenda;
-import com.fmsp.medical_appointment.entity.core.oracle.Usuario;
 import com.fmsp.medical_appointment.repository.jpa.oracle.AgendaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AgendaServiceImpl implements IConsultarAgenda, ICrearAgenda, ICancelarAgenda {
@@ -22,10 +21,9 @@ public class AgendaServiceImpl implements IConsultarAgenda, ICrearAgenda, ICance
     }
 
     @Override
-    public AgendaDTO consultarAgenda(Long idMedico, LocalDateTime fechaHora) {
-        return agendaRepository.findByMedicoAndFecha(idMedico, fechaHora)
-                .map(agenda -> modelMapper.map(agenda, AgendaDTO.class))
-                .orElse(null);  // Si no hay agenda en esa fecha/hora, devuelve `null`
+    public Optional<AgendaDTO> consultarAgenda(Long idMedico, LocalDateTime fechaHora) {
+        return agendaRepository.findByMedicoAndFecha(idMedico, fechaHora).map(agenda ->
+                modelMapper.map(agenda, AgendaDTO.class));
     }
 
     @Override
@@ -37,6 +35,6 @@ public class AgendaServiceImpl implements IConsultarAgenda, ICrearAgenda, ICance
 
     @Override
     public AgendaDTO eliminarAgenda(AgendaDTO agenda) {
-        return null;
+        throw new UnsupportedOperationException("Método eliminarAgenda() aún no implementado.");
     }
 }

@@ -42,27 +42,24 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
     @Override
     public ResponseDTO solicitarCita(SolicitarCitaDTO solicitarCita) {
 
-        if(solicitarCita.getMetodoPago().equals("EFECTIVO")){
-            solicitarCita.setEstado(EstadoCita.CONFIRMADA);
-        }
-
-        var response = new ResponseDTO();
-
+        actualizarEstadoCita(solicitarCita);
         consultarAgenda(solicitarCita);
+
         var agenda = crearAgenda(solicitarCita);
 
         var cita = modelMapper.map(solicitarCita, Cita.class);
         var citaDB = citaRepository.save(cita);
 
-        response.setDatosCita(modelMapper.map(citaDB, SolicitarCitaDTO.class));
-        response.setAgenda(agenda);
-
-        var especialista = consultarUsuarioEspecialista.consultarEspecialista(response.getDatosCita().getIdMedico());
-
-        response.getAgenda().setMedico(especialista);
+        var response = construirResponse(citaDB, agenda);
         enviarNotificacion(response);
 
         return response;
+    }
+
+    private void actualizarEstadoCita(SolicitarCitaDTO solicitarCita) {
+        if (solicitarCita.getMetodoPago().equals("EFECTIVO")) {
+            solicitarCita.setEstado(EstadoCita.CONFIRMADA);
+        }
     }
 
     private void enviarNotificacion(ResponseDTO response) {
@@ -90,19 +87,26 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
     }
 
     public void consultarAgenda(SolicitarCitaDTO solicitarCita) {
-        AgendaDTO agenda = consultarAgenda.consultarAgenda(solicitarCita.getIdMedico(), solicitarCita.getFechaHora());
-
-        if (agenda != null) {
-            throw new CustomServiceException(
-                    Constants.SCHELUDED_OFF, solicitarCita.getIdTx(), Constants.ERROR_E001, Constants.ERROR_400,
-                    Constants.MEDIC_UNAVAILABLE_AT_THIS_TIME
-            );
-        }
+        consultarAgenda.consultarAgenda(solicitarCita.getIdMedico(), solicitarCita.getFechaHora())
+                .ifPresent(agenda -> {
+                    throw new CustomServiceException(
+                            Constants.SCHELUDED_OFF, solicitarCita.getIdTx(), Constants.ERROR_E001, Constants.ERROR_400,
+                            Constants.MEDIC_UNAVAILABLE_AT_THIS_TIME
+                    );
+                });
     }
 
+    private ResponseDTO construirResponse(Cita citaDB, AgendaDTO agenda) {
+        var response = new ResponseDTO();
+        response.setDatosCita(modelMapper.map(citaDB, SolicitarCitaDTO.class));
+        response.setAgenda(agenda);
+        var especialista = consultarUsuarioEspecialista.consultarEspecialista(response.getDatosCita().getIdMedico());
+        response.getAgenda().setMedico(especialista);
+        return response;
+    }
 
     @Override
     public SolicitarCitaDTO cancelarCita(SolicitarCitaDTO solicitarCita) {
-        return null;
+        throw new UnsupportedOperationException("Método cancelarCita() aún no implementado.");
     }
 }
