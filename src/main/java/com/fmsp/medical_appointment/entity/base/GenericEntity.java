@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class GenericEntity {
 
     @Column(name = "CREATED_AT")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;

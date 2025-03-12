@@ -3,6 +3,7 @@ package com.fmsp.medical_appointment.util;
 import com.fmsp.medical_appointment.dto.ErrorItemDTO;
 import com.fmsp.medical_appointment.dto.SolicitarCitaDTO;
 import com.fmsp.medical_appointment.entity.enums.Especialidad;
+import com.fmsp.medical_appointment.entity.enums.MetodoPago;
 import com.fmsp.medical_appointment.entity.enums.PrecioCitas;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +17,18 @@ public class ValidateRequest {
         List<ErrorItemDTO> errors = new ArrayList<>();
 
         validarEspecialidad(errors, request);
+        validarMetodoPago(errors, request);
 
         return errors;
+    }
+
+    private void validarMetodoPago(List<ErrorItemDTO> errors, SolicitarCitaDTO request) {
+        var metodoPago = MetodoPago.getByValor(request.getMetodoPago().getValor());
+
+        if(metodoPago == null){
+            errors.add(new ErrorItemDTO("E006", "400", "Metodo de pago invalido"));
+        }
+
     }
 
     private void validarEspecialidad(List<ErrorItemDTO> errors, SolicitarCitaDTO request) {
