@@ -26,7 +26,7 @@ public class ValidateRequest {
         var metodoPago = MetodoPago.getByValor(request.getMetodoPago().getValor());
 
         if(metodoPago == null){
-            errors.add(new ErrorItemDTO("E006", "400", "Metodo de pago invalido"));
+            errors.add(new ErrorItemDTO(Constants.ERROR_E006, Constants.ERROR_400, Constants.ERROR_PAYMENT_METHOD));
         }
 
     }
@@ -36,11 +36,11 @@ public class ValidateRequest {
         var precio = PrecioCitas.getByName(especialidad.name());
 
         if(especialidad.getIndice().longValue() != request.getIdEspecialidad()) {
-            errors.add(new ErrorItemDTO("E004", "400", "no existe la especialidad"));
+            errors.add(new ErrorItemDTO(Constants.ERROR_E004, Constants.ERROR_400, Constants.ESP_NOT_FOUND));
         }
 
         if(request.getValorCita() < precio.getValor()){
-            errors.add(new ErrorItemDTO("E004", "400", "monto insuficiente"));
+            errors.add(new ErrorItemDTO(Constants.ERROR_E004, Constants.ERROR_400, Constants.INSUFFICIENT_AMOUNT));
         }
     }
 }

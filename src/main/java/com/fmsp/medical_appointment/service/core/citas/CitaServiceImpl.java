@@ -9,9 +9,11 @@ import com.fmsp.medical_appointment.service.core.agenda.IConsultarAgenda;
 import com.fmsp.medical_appointment.service.core.agenda.ICrearAgenda;
 import com.fmsp.medical_appointment.service.core.notificacion.IEnviarNotificacion;
 import com.fmsp.medical_appointment.service.usuario.IConsultarUsuarioEspecialista;
+import com.fmsp.medical_appointment.util.Constants;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 
 @Service
@@ -67,8 +69,11 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
         var notificacion = new NotificacionDTO();
         notificacion.setIdPaciente(response.getDatosCita().getIdPaciente());
         notificacion.setFechaEnvio(LocalDateTime.now());
-        notificacion.setMensaje("Su cita ha sido programada para el dia "+ response.getAgenda().getFecha()
-                + ", con el especialista: "+ response.getAgenda().getMedico().getNombre());
+        notificacion.setMensaje(MessageFormat.format(
+                Constants.CITA_PROGRAMADA_MESSAGE,
+                response.getAgenda().getFecha(),
+                response.getAgenda().getMedico().getNombre()
+        ));
 
         enviarNotificacion.enviarNotificacion(notificacion);
     }
@@ -89,7 +94,8 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
 
         if (agenda != null) {
             throw new CustomServiceException(
-                    "Agenda ocupada", solicitarCita.getIdTx(), "E001", "400", "El médico ya tiene una cita en este horario."
+                    Constants.SCHELUDED_OFF, solicitarCita.getIdTx(), Constants.ERROR_E001, Constants.ERROR_400,
+                    Constants.MEDIC_UNAVAILABLE_AT_THIS_TIME
             );
         }
     }
