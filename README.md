@@ -60,7 +60,6 @@ Este es un ejemplo de respuesta cuando la solicitud contiene un error de formato
 }
 
 ```
-# medical_appointment
 
 ## Success Response Example
 
