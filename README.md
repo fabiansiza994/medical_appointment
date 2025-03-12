@@ -59,3 +59,28 @@ Este es un ejemplo de respuesta cuando la solicitud se procesa exitosamente.
   },
   "message": "EXITO"
 }
+```
+
+## Failed Response Example
+
+Este es un ejemplo de respuesta cuando la solicitud contiene errores, como una especialidad inexistente o un monto insuficiente.
+
+```json
+{
+  "idTx": "f8c745f6-a9ad-4162-b80a-bb49606f025d",
+  "processStatus": "PF",
+  "message": "ERROR",
+  "errors": [
+    {
+      "codeError": "E004",
+      "codTypeError": "400",
+      "messageError": "no existe la especialidad"
+    },
+    {
+      "codeError": "E004",
+      "codTypeError": "400",
+      "messageError": "monto insuficiente"
+    }
+  ]
+}
+

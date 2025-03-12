@@ -15,4 +15,7 @@ public class ErrorItemDTO {
         this.codTypeError = codTypeError;
         this.messageError = messageError;
     }
+
+    public ErrorItemDTO() {
+    }
 }

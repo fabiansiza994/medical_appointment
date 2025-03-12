@@ -1,0 +1,47 @@
+package com.fmsp.medical_appointment.entity.enums;
+
+import java.util.Arrays;
+
+public enum Especialidad {
+    MGENERAL(1, "MGENERAL"),
+    ODONTOLOGIA(2, "ODONTOLOGIA");
+
+    private Integer indice;
+    private String valor;
+
+    public Integer getIndice() {
+        return indice;
+    }
+
+    public void setIndice(Integer indice) {
+        this.indice = indice;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
+    Especialidad(Integer indice, String valor) {
+        this.valor = valor;
+        this.indice = indice;
+    }
+
+    public static Especialidad getByIndice(Integer indice) {
+        return Arrays.stream(Especialidad.values())
+                .filter(tipo -> tipo.getIndice().equals(indice))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static Especialidad getByValor(String valor) {
+        return Arrays.stream(Especialidad.values())
+                .filter(tipo -> tipo.getValor().equalsIgnoreCase(valor))
+                .findFirst()
+                .orElse(null);
+    }
+
+}
