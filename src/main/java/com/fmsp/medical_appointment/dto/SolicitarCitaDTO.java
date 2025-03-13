@@ -1,6 +1,5 @@
 package com.fmsp.medical_appointment.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fmsp.medical_appointment.entity.enums.EstadoCita;
