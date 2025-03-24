@@ -19,6 +19,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
 
@@ -134,4 +137,34 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
         notificacionHelper.enviar(response, Constants.CITA_CANCELADA);
         return response;
     }
+
+    public void enviarRecordatorioCitasProximas() {
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime inicio = ahora.plusDays(1).withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime fin = inicio.withHour(23).withMinute(59).withSecond(59);
+
+        List<Cita> citas = citaRepository.findCitasParaRecordatorio(inicio, fin);
+
+        for (Cita cita : citas) {
+            String correo = cita.getPaciente().getEmail();
+
+            if (correo == null || correo.isBlank()) {
+                continue;
+            }
+
+            String body = "<h2>Recordatorio de cita</h2>" +
+                    "<p>Estimado/a " + cita.getPaciente().getNombre() + ",</p>" +
+                    "<p>Le recordamos que tiene una cita programada para el día <strong>" + cita.getFechaHora().toLocalDate() +
+                    "</strong> a las <strong>" + cita.getFechaHora().toLocalTime() + "</strong>.</p>" +
+                    "<p>Por favor, llegue con anticipación. ¡Gracias por confiar en nosotros!</p>";
+
+            notificacionHelper.enviarCorreoSimple(
+                    correo,
+                    "Recordatorio de Cita Médica",
+                    body
+            );
+
+        }
+    }
+
 }

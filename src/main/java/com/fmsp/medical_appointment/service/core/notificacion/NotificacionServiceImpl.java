@@ -12,9 +12,9 @@ public class NotificacionServiceImpl implements IEnviarNotificacion{
     private final NotificacionRepository notificacionRepository;
     private final ModelMapper modelMapper;
 
-    public NotificacionServiceImpl(NotificacionRepository notificacionRepository, ModelMapper modelMapper, ModelMapper modelMapper1) {
+    public NotificacionServiceImpl(NotificacionRepository notificacionRepository, ModelMapper modelMapper) {
         this.notificacionRepository = notificacionRepository;
-        this.modelMapper = modelMapper1;
+        this.modelMapper = modelMapper;
     }
 
     @Override

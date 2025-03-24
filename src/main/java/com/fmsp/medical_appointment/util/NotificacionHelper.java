@@ -3,6 +3,7 @@ package com.fmsp.medical_appointment.util;
 import com.fmsp.medical_appointment.dto.NotificacionDTO;
 import com.fmsp.medical_appointment.dto.ResponseDTO;
 import com.fmsp.medical_appointment.service.core.notificacion.IEnviarNotificacion;
+import com.fmsp.medical_appointment.service.messages.MailService;
 import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
@@ -12,9 +13,11 @@ import java.time.LocalDateTime;
 public class NotificacionHelper {
 
     private final IEnviarNotificacion enviarNotificacion;
+    private final MailService mailService;
 
-    public NotificacionHelper(IEnviarNotificacion enviarNotificacion) {
+    public NotificacionHelper(IEnviarNotificacion enviarNotificacion, MailService mailService) {
         this.enviarNotificacion = enviarNotificacion;
+        this.mailService = mailService;
     }
 
     public void enviar(ResponseDTO response, String mensajePlantilla) {
@@ -28,5 +31,9 @@ public class NotificacionHelper {
         ));
 
         enviarNotificacion.enviarNotificacion(notificacion);
+    }
+
+    public void enviarCorreoSimple(String toEmail, String asunto, String mensajeHtml) {
+        mailService.sendMail(toEmail, asunto, mensajeHtml);
     }
 }
