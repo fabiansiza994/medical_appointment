@@ -1,6 +1,6 @@
 package com.fmsp.medical_appointment.configuration.exceptionManager;
 
-import com.fmsp.medical_appointment.configuration.exceptionManager.exceptions.CustomServiceException;
+import com.fmsp.medical_appointment.controller.exceptions.CustomServiceException;
 import com.fmsp.medical_appointment.dto.ErrorItemDTO;
 import com.fmsp.medical_appointment.util.Constants;
 import org.springframework.http.ResponseEntity;

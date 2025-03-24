@@ -17,4 +17,7 @@ public interface AgendaRepository extends JpaRepository<Agenda, Long> {
             "AND a.disponibilidad = true")
     Optional<Agenda> findByMedicoAndFecha(@Param("medicoId") Long medicoId,
                                           @Param("fechaHora") LocalDateTime fechaHora);
+
+    @Query("SELECT a FROM Agenda a WHERE a.medico.id = :idMedico AND a.fecha = :fecha")
+    Optional<Agenda> findByMedicoIdAndFecha(Long idMedico, LocalDateTime fecha);
 }

@@ -17,5 +17,5 @@ public class GenericEntity {
     private LocalDateTime updatedAt;
 
     @Column(name = "ESTADO")
-    protected Boolean estado;
+    protected Boolean estado = true;
 }

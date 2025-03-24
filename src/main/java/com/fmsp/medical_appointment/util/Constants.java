@@ -9,6 +9,7 @@ public class Constants {
     public static final String SCHELUDED_OFF = "Agenda ocupada";
     public static final String CITA_PROGRAMADA_MESSAGE =
             "Su cita ha sido programada para el día {0}, con el especialista: {1}.";
+    public static final String CITA_CANCELADA = "su cita a sido cancelada exitosamente!";
 
 
     // CUSTOM CODE ERRORS

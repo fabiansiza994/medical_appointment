@@ -1,4 +1,4 @@
-package com.fmsp.medical_appointment.configuration.exceptionManager.exceptions;
+package com.fmsp.medical_appointment.controller.exceptions;
 
 public class CustomServiceException extends RuntimeException {
     private String idTx;

@@ -32,7 +32,7 @@ public class ValidateRequest {
     }
 
     private void validarEspecialidad(List<ErrorItemDTO> errors, SolicitarCitaDTO request) {
-        var especialidad = Especialidad.getByIndice(Math.toIntExact(request.getIdEspecialidad()));
+        var especialidad = Especialidad.getByIndice(request.getIdEspecialidad());
         var precio = PrecioCitas.getByName(especialidad.name());
 
         if(especialidad.getIndice().longValue() != request.getIdEspecialidad()) {

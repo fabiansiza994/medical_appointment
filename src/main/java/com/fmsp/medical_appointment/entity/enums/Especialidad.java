@@ -3,17 +3,17 @@ package com.fmsp.medical_appointment.entity.enums;
 import java.util.Arrays;
 
 public enum Especialidad {
-    MGENERAL(1, "MGENERAL"),
-    ODONTOLOGIA(2, "ODONTOLOGIA");
+    MGENERAL(1L, "MGENERAL"),
+    ODONTOLOGIA(2L, "ODONTOLOGIA");
 
-    private Integer indice;
+    private Long indice;
     private String valor;
 
-    public Integer getIndice() {
+    public Long getIndice() {
         return indice;
     }
 
-    public void setIndice(Integer indice) {
+    public void setIndice(Long indice) {
         this.indice = indice;
     }
 
@@ -25,12 +25,12 @@ public enum Especialidad {
         this.valor = valor;
     }
 
-    Especialidad(Integer indice, String valor) {
+    Especialidad(Long indice, String valor) {
         this.valor = valor;
         this.indice = indice;
     }
 
-    public static Especialidad getByIndice(Integer indice) {
+    public static Especialidad getByIndice(Long indice) {
         return Arrays.stream(Especialidad.values())
                 .filter(tipo -> tipo.getIndice().equals(indice))
                 .findFirst()

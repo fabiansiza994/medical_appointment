@@ -15,4 +15,6 @@ public class UsuarioDTO {
     private String email;
     private String telefono;
     private EspecialidadDTO especialidad;
+
+    public UsuarioDTO() {}
 }

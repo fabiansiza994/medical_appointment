@@ -34,7 +34,18 @@ public class AgendaServiceImpl implements IConsultarAgenda, ICrearAgenda, ICance
     }
 
     @Override
-    public AgendaDTO eliminarAgenda(AgendaDTO agenda) {
-        throw new UnsupportedOperationException("Método eliminarAgenda() aún no implementado.");
+    public AgendaDTO cancelarAgenda(AgendaDTO agendaDTO) {
+        Long idMedico = agendaDTO.getMedico().getId();
+        LocalDateTime fecha = agendaDTO.getFecha();
+
+        Agenda agenda = agendaRepository
+                .findByMedicoIdAndFecha(idMedico, fecha)
+                .orElseThrow(() -> new RuntimeException("Agenda no encontrada para la fecha y médico especificados"));
+
+        agenda.setDisponibilidad(true);
+        agenda.setUpdatedAt(LocalDateTime.now());
+
+        Agenda updated = agendaRepository.save(agenda);
+        return modelMapper.map(updated, AgendaDTO.class);
     }
 }
