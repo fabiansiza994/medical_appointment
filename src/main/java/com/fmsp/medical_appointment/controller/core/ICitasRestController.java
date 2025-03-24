@@ -55,4 +55,7 @@ public interface ICitasRestController {
     })
     @PostMapping("/cancelar")
     ResponseEntity<ApiResponse<Object>> cancelarCita(SolicitarCitaDTO solicitarCitaDTO);
+
+    @PostMapping("/reagendar")
+    ResponseEntity<ApiResponse<Object>> reAgendarCita(SolicitarCitaDTO solicitarCitaDTO);
 }

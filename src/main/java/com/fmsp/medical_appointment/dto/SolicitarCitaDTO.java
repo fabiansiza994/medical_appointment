@@ -24,6 +24,7 @@ public class SolicitarCitaDTO {
     private Long idMedico;
     private Long idEspecialidad;
     private LocalDateTime fechaHora;
+    private LocalDateTime nuevaFechaHora;
     private TipoCita tipoCita;
     private MetodoPago metodoPago;
     private Double valorCita;

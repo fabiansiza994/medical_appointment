@@ -1,5 +1,6 @@
 package com.fmsp.medical_appointment.service.core.agenda;
 
+import com.fmsp.medical_appointment.controller.exceptions.CustomServiceException;
 import com.fmsp.medical_appointment.dto.AgendaDTO;
 import com.fmsp.medical_appointment.entity.core.oracle.Agenda;
 import com.fmsp.medical_appointment.repository.jpa.oracle.AgendaRepository;
@@ -34,13 +35,19 @@ public class AgendaServiceImpl implements IConsultarAgenda, ICrearAgenda, ICance
     }
 
     @Override
-    public AgendaDTO cancelarAgenda(AgendaDTO agendaDTO) {
+    public AgendaDTO cancelarAgenda(AgendaDTO agendaDTO, String idTx) {
         Long idMedico = agendaDTO.getMedico().getId();
         LocalDateTime fecha = agendaDTO.getFecha();
 
         Agenda agenda = agendaRepository
                 .findByMedicoIdAndFecha(idMedico, fecha)
-                .orElseThrow(() -> new RuntimeException("Agenda no encontrada para la fecha y médico especificados"));
+                .orElseThrow(() -> new CustomServiceException(
+                        "ERROR",
+                        idTx,
+                        "E014",
+                        "404",
+                        "Agenda no encontrada para la fecha y médico especificados"
+                ));
 
         agenda.setDisponibilidad(true);
         agenda.setUpdatedAt(LocalDateTime.now());

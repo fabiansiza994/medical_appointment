@@ -5,6 +5,7 @@ import com.fmsp.medical_appointment.configuration.exceptionManager.ResponseHandl
 import com.fmsp.medical_appointment.dto.ErrorItemDTO;
 import com.fmsp.medical_appointment.dto.SolicitarCitaDTO;
 import com.fmsp.medical_appointment.service.core.citas.ICancelarCita;
+import com.fmsp.medical_appointment.service.core.citas.IReAgendarCita;
 import com.fmsp.medical_appointment.service.core.citas.ISolicitarCita;
 import com.fmsp.medical_appointment.util.ValidateRequest;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,14 @@ public class CitasRestController implements ICitasRestController{
 
     private final ICancelarCita cancelarCita;
     private final ISolicitarCita citaService;
+    private final IReAgendarCita reAgendarCita;
+
     private final ValidateRequest validateRequest;
 
-    public CitasRestController(ICancelarCita cancelarCita, ISolicitarCita citaService, ValidateRequest validateRequest) {
+    public CitasRestController(ICancelarCita cancelarCita, ISolicitarCita citaService, IReAgendarCita reAgendarCita, ValidateRequest validateRequest) {
         this.cancelarCita = cancelarCita;
         this.citaService = citaService;
+        this.reAgendarCita = reAgendarCita;
         this.validateRequest = validateRequest;
     }
 
@@ -58,6 +62,22 @@ public class CitasRestController implements ICitasRestController{
         }
 
         var response = cancelarCita.cancelarCita(solicitarCitaDTO);
+        return ResponseHandler.successResponse(response, idTest.toString());
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<Object>> reAgendarCita(@RequestBody SolicitarCitaDTO solicitarCitaDTO) {
+        UUID idTest = UUID.randomUUID();
+
+        solicitarCitaDTO.setIdTx(idTest.toString());
+
+        List<ErrorItemDTO> errors = validateRequest.validateRequest(solicitarCitaDTO);
+
+        if(!errors.isEmpty()){
+            return ResponseHandler.badRequestResponse(errors, idTest.toString());
+        }
+
+        var response = reAgendarCita.reAgendarCita(solicitarCitaDTO);
         return ResponseHandler.successResponse(response, idTest.toString());
     }
 }

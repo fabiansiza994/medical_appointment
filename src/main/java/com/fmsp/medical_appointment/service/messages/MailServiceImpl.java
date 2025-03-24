@@ -42,4 +42,6 @@ public class MailServiceImpl implements MailService{
             log.error("Error al enviar mail a {}", toEmail);
         }
     }
+
+
 }

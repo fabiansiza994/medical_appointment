@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
+public class CitaServiceImpl implements ISolicitarCita, ICancelarCita, IReAgendarCita {
 
     private final IConsultarAgenda consultarAgenda;
     private final ICrearAgenda crearAgenda;
@@ -108,9 +108,18 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
         var idTx = solicitarCita.getIdTx();
 
         Cita cita = citaRepository
-                .findByFechaHoraAndPacienteIdAndMedicoId(solicitarCita.getFechaHora(), solicitarCita.getIdPaciente(),
-                        solicitarCita.getIdMedico())
-                .orElseThrow(() -> new RuntimeException("Cita no encontrada con los datos proporcionados"));
+                .findByFechaHoraAndPacienteIdAndMedicoId(
+                        solicitarCita.getFechaHora(),
+                        solicitarCita.getIdPaciente(),
+                        solicitarCita.getIdMedico()
+                )
+                .orElseThrow(() -> new CustomServiceException(
+                        "ERROR",
+                        idTx,
+                        "E010",
+                        "404",
+                        "Cita no encontrada con los datos proporcionados"
+                ));
 
         if(cita.getEstado() == EstadoCita.CANCELADA){
             throw new CustomServiceException("ERROR", idTx, "E008", "500", "la cita ya fue cancelada");
@@ -122,6 +131,9 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
             throw new CustomServiceException("ERROR", idTx, "E007", "500", "Solo se pueden cancelar citas en estado PENDIENTE o CONFIRMADA");
         }
 
+        double nuevoValor = calcularIncrementoPorReagendamiento(cita.getValorCita());
+        cita.setValorCita(nuevoValor);
+
         cita.setEstado(EstadoCita.CANCELADA);
         citaRepository.save(cita);
 
@@ -131,10 +143,17 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
         AgendaDTO agendaDTO = new AgendaDTO();
         agendaDTO.setMedico(medico);
         agendaDTO.setFecha(solicitarCita.getFechaHora());
-        cancelarAgenda.cancelarAgenda(agendaDTO);
+        cancelarAgenda.cancelarAgenda(agendaDTO, idTx);
 
         var response = construirResponse(cita, agendaDTO);
         notificacionHelper.enviar(response, Constants.CITA_CANCELADA);
+
+        notificacionHelper.enviarCorreoCita(
+                cita,
+                "Cancelación de Cita Médica",
+                Constants.CITA_CANCELADA_MESSAGE
+        );
+
         return response;
     }
 
@@ -165,6 +184,88 @@ public class CitaServiceImpl implements ISolicitarCita, ICancelarCita {
             );
 
         }
+    }
+
+    @Transactional
+    @Override
+    public ResponseDTO reAgendarCita(SolicitarCitaDTO solicitarCita) {
+
+        var idTx = solicitarCita.getIdTx();
+
+        // 1. Buscar cita original
+        Cita citaOriginal = citaRepository
+                .findByFechaHoraAndPacienteIdAndMedicoId(
+                        solicitarCita.getFechaHora(),
+                        solicitarCita.getIdPaciente(),
+                        solicitarCita.getIdMedico()
+                )
+                .orElseThrow(() -> new CustomServiceException("ERROR", idTx, "E010", "404", "Cita no encontrada"));
+
+
+        var fechaOriginal = citaOriginal.getFechaHora();
+        var nuevaFecha = solicitarCita.getNuevaFechaHora();
+
+        if (nuevaFecha.toLocalDate().isEqual(fechaOriginal.toLocalDate())) {
+            throw new CustomServiceException("ERROR", idTx, "E012", "400", "No se puede reagendar una cita el mismo día");
+        }
+
+        if (nuevaFecha.isBefore(fechaOriginal)) {
+            throw new CustomServiceException("ERROR", idTx, "E015", "400", "No se puede reagendar a una fecha anterior a la original");
+        }
+
+        // 2. Validaciones
+        if (citaOriginal.getEstado() == EstadoCita.CANCELADA || citaOriginal.getEstado() == EstadoCita.COMPLETADA) {
+            throw new CustomServiceException("ERROR", idTx, "E011", "400", "No se puede reagendar una cita cancelada o completada");
+        }
+
+        // 3. Verificar que el médico tenga disponibilidad en la nueva fecha
+        consultarAgenda.consultarAgenda(solicitarCita.getIdMedico(), solicitarCita.getNuevaFechaHora())
+                .ifPresent(agenda -> {
+                    throw new CustomServiceException("ERROR", idTx, "E013", "400", "El médico no tiene disponibilidad en la nueva fecha");
+                });
+
+        // 4. Liberar la agenda anterior
+        var medico = new UsuarioDTO();
+        medico.setId(citaOriginal.getMedico().getId());
+
+        var agendaAntigua = new AgendaDTO();
+        agendaAntigua.setMedico(medico);
+        agendaAntigua.setFecha(citaOriginal.getFechaHora());
+        agendaAntigua.setDisponibilidad(true);
+        cancelarAgenda.cancelarAgenda(agendaAntigua, idTx);
+
+
+        // 5. Crear nueva agenda
+        var medicoSoli = new UsuarioDTO();
+        medicoSoli.setId(solicitarCita.getIdMedico());
+
+        var agendaNueva = new AgendaDTO();
+        agendaNueva.setMedico(medicoSoli);
+        agendaNueva.setFecha(solicitarCita.getNuevaFechaHora());
+        agendaNueva.setDisponibilidad(false);
+        var nuevaAgenda = crearAgenda.crearAgenda(agendaNueva);
+
+        // 6. Actualizar la cita original con la nueva fecha y nuevo valor
+        citaOriginal.setFechaHora(solicitarCita.getNuevaFechaHora());
+        double nuevoValor = calcularIncrementoPorReagendamiento(citaOriginal.getValorCita());
+        citaOriginal.setValorCita(nuevoValor);
+        citaRepository.save(citaOriginal);
+
+        // 7. Armar respuesta y notificar
+        var response = construirResponse(citaOriginal, nuevaAgenda);
+        notificacionHelper.enviar(response, Constants.CITA_REAGENDADA_MESSAGE);
+
+        notificacionHelper.enviarCorreoCita(
+                citaOriginal,
+                "Reagendamiento de Cita Médica",
+                Constants.CITA_REAGENDADA_MESSAGE
+        );
+
+        return response;
+    }
+
+    private double calcularIncrementoPorReagendamiento(double valorOriginal) {
+        return valorOriginal + (valorOriginal / 2);
     }
 
 }
